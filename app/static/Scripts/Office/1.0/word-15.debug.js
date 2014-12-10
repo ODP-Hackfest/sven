@@ -1,7 +1,11 @@
-/* Word specific JavaScript OM library */
-/* Version: 15.0.4425.1000 */
+/* Word specific JavaScript API library */
+/* Version: 15.0.4448.1000 */
 /*
 	Copyright (c) Microsoft Corporation.  All rights reserved.
+*/
+
+/*
+	Your use of this file is governed by the Microsoft Services Agreement http://go.microsoft.com/fwlink/?LinkId=266419.
 */
 
 OSF.OUtil.augmentList(Microsoft.Office.WebExtension.CoercionType, {

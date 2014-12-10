@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title></title>
+    <script src="../../Scripts/jquery-1.9.1.js" type="text/javascript"></script>
+
+    <link href="../../Content/Office.css" rel="stylesheet" type="text/css" />
+    <!-- <script src="https://appsforoffice.microsoft.com/lib/1.0/hosted/office.js" type="text/javascript"></script> -->
+
+    <!-- To enable offline debugging using a local reference to Office.js, use:                        -->
+    <script src="../../Scripts/Office/MicrosoftAjax.js" type="text/javascript"></script>
+    <script src="../../Scripts/Office/1.0/office.js" type="text/javascript"></script>
+
+    <link href="../App.css" rel="stylesheet" type="text/css" />
+    <script src="../App.js" type="text/javascript"></script>
+
+    <link href="Home.css" rel="stylesheet" type="text/css" />
+    <script src="Home.js" type="text/javascript"></script>
+</head>
+<body>
+    <!-- Page content -->
+    <div id="Content">
+        <label>Online Picture Address: </label>
+        <input id="Text1" type="text" />
+        <input type="button" id="preViewBtn" value="Preview Picture" />
+        <br />
+        <br />
+        <img id="prePic" src="" />
+    </div>
+    <div>
+        <input type="Button" value="Insert Image" id="insertImageBtn" style="margin-top: 10px; padding: 0px; width: 100px;" disabled="disabled" />
+        <br />
+        <span>Results: </span><div id="results"></div>
+
+    </div>
+</body>
+</html>

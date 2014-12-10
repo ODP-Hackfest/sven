@@ -1,7 +1,11 @@
-/* PowerPoint specific OM library */
-/* Version: 15.0.4434.1000 */
+/* PowerPoint specific API library */
+/* Version: 15.0.4448.1000 */
 /*
 	Copyright (c) Microsoft Corporation.  All rights reserved.
+*/
+
+/*
+	Your use of this file is governed by the Microsoft Services Agreement http://go.microsoft.com/fwlink/?LinkId=266419.
 */
 
 OSF.ClientMode={

@@ -4,10 +4,10 @@ _u.ExtensibilityStrings = function()
 {
 };
 _u.ExtensibilityStrings.registerClass("_u.ExtensibilityStrings");
-_u.ExtensibilityStrings.l_EwsRequestOversized_Text = "น้ำThe request exceeds the 1 MB size limit. Please modify your EWS request.ท้ายสุด";
-_u.ExtensibilityStrings.l_OffsetNotfound_Text = "น้ำAn offset for this time stamp couldn't be found.ท้ายสุด";
-_u.ExtensibilityStrings.l_ElevatedPermissionNeededForMethod_Text = "น้ำElevated permission is required to call the method: '{0}'.ท้ายสุด";
-_u.ExtensibilityStrings.l_ElevatedPermissionNeeded_Text = "น้ำElevated permission is required to access protected members of the JavaScript API for Office.ท้ายสุด";
-_u.ExtensibilityStrings.l_InvalidEventDates_Text = "น้ำThe end date occurs before the start date.ท้ายสุด";
-_u.ExtensibilityStrings.l_InvalidDate_Text = "น้ำThe input doesn't resolve to a valid date.ท้ายสุด";
-_u.ExtensibilityStrings.l_InternalProtocolError_Text = "น้ำInternal protocol error: '{0}'.ท้ายสุด"
+_u.ExtensibilityStrings.l_EwsRequestOversized_Text = "ขนาดการร้องขอเกินขีดจำกัดที่ 1 เมกะไบต์ โปรดปรับเปลี่ยนการร้องขอ EWS ของคุณ";
+_u.ExtensibilityStrings.l_OffsetNotfound_Text = "ไม่พบออฟเซตสำหรับการประทับเวลานี้";
+_u.ExtensibilityStrings.l_ElevatedPermissionNeededForMethod_Text = "จำเป็นต้องมีสิทธิ์ที่ปรับให้สูงขึ้นเพื่อเรียกใช้เมธอด: '{0}'";
+_u.ExtensibilityStrings.l_ElevatedPermissionNeeded_Text = "จำเป็นต้องมีสิทธิ์ที่ปรับให้สูงขึ้นเพื่อเข้าถึงสมาชิกของ JavaScript API ที่ได้รับการป้องกันสำหรับ Office";
+_u.ExtensibilityStrings.l_InvalidEventDates_Text = "วันที่สิ้นสุดเกิดขึ้นก่อนวันที่เริ่มต้น";
+_u.ExtensibilityStrings.l_InvalidDate_Text = "ค่าป้อนเข้าไม่ได้แก้ไขเป็นวันที่ถูกต้อง";
+_u.ExtensibilityStrings.l_InternalProtocolError_Text = "ข้อผิดพลาดของโพรโทคอลภายใน: '{0}'"

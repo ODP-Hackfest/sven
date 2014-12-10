@@ -589,7 +589,7 @@ Office._CustomXmlPart = function () {
                 ///<param name="fileType" type="Office.FileType">The format in which the file will be returned</param>
                 ///<param name="options" type="Object" optional="true">
                 ///    Syntax example: {sliceSize:1024}
-                /// &#10;     sliceSize: Specifies the desired slice size (in Kbytes) up to 4MB. If not specified a default slice size of 4MB will be used.
+                /// &#10;     sliceSize: Specifies the desired slice size (in bytes) up to 4MB. If not specified a default slice size of 4MB will be used.
                 ///</param>
                 ///<param name="callback" type="function" optional="true">The optional callback method</param>
                 if (arguments.length == 2) { callback = options; };

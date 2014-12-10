@@ -6,44 +6,31 @@ Office._context_mailbox_item_to_emailaddress = function () {
 
 
 Office._$MailboxAppointment = function () {
+  ///<field name="attachments" type='AttachmentDetails[]'>Gets a list of attachments to the appointment.</field>
+  ///<field name="dateTimeCreated" type='Date'>Gets the date and time that an appointment was created.</field>
+  ///<field name="dateTimeModified" type='Date'>Gets the date and time that the appointment was last modified.</field>
+  ///<field name="itemClass" type='String'>Gets the item class of an item.</field>
+  ///<field name="itemId" type="String">Gets the Exchange Web Services (EWS) item identifier for an item.</field>
+  ///<field name="itemType" type='Office.MailboxEnums.ItemType'>Gets the type of item that an instance represents.</field>
+
+  ///<field name="normalizedSubject" type='String'>Gets the subject of the appointment, with standard prefixes removed.</field>
+  ///<field name="subject" type='String'>Gets the subject of the appointment.</field>
+
   ///<field name="end" type='Date'>Gets the date and time that the appointment is to end.</field>
-  ///<field name="location" type='Object'>Gets the location of an appointment.</field>
-  ///<field name="normalizedSubject" type='Object'>Gets the subject of the item, with standard prefixes removed.</field>
+  ///<field name="location" type='String'>Gets the location of an appointment.</field>
   ///<field name="optionalAttendees" type='EmailAddressDetails[]'>Gets a list of email addresses for optional attendees.</field>
-  ///<field name="organizer" type="String">Gets the email address of the meeting organizer for the specified meeting.</field>
-  ///<field name="sender" type='Object'>Gets the email address of the sender of an email message.</field>
+  ///<field name="organizer" type="EmailAddressDetails">Gets the email address of the meeting organizer for the specified meeting.</field>
   ///<field name="requiredAttendees" type='EmailAddressDetails[]'>Gets a list of email addresses for required attendees.</field>
   ///<field name="resources" type='EmailAddressDetails[]'>Gets the resources required for an appointment.</field>
   ///<field name="start" type='Date'>Gets the date and time that the appointment is to begin.</field>
-  ///<field name="subject" type='Object'>Gets the subject of the item.</field>
-  ///<field name="dateTimeCreated" type='Date'>(Message and Appointment) Gets the date and time that an item was created.</field>
-  ///<field name="dateTimeModified" type='Date'>(Message and Appointment) Gets the date and time that the item was last modified.</field>
-  ///<field name="itemId" type="String">Gets the Exchange Web Services (EWS) item identifier for an item.</field>
-  ///<field name="itemType" type='Object'>Gets the type of item that an instance represents.</field>
-  ///<field name="itemClass" type='Object'>Gets the item class of an item.</field>
 
-  this.itemType = {};
-  this.itemClass = {};
-  this.itemId = {};
-  this.dateTimeCreated = {};
-  this.dateTimeModified = {};
+  this.loadCustomPropertiesAsync = function (callback, userContext) {
+    ///<summary>Asynchronously loads custom properties that are specific to the item and a mail app for Outlook.</summary>
+    ///<param name="callback" type="Function">The method to call when the asynchronous load is complete.</param>
+    ///<param name="userContext" type="Object" optional="true">Any state data that is passed to the asynchronous method.</param>
 
-  this.end = {};
-  this.location = {};
-  this.normalizedSubject = {};
-  this.optionalAttendees = new Array(new Office._context_mailbox_item_emailAddressDetails());
-  this.requiredAttendees = new Array(new Office._context_mailbox_item_emailAddressDetails());
-  this.resources = new Array(new Office._context_mailbox_item_emailAddressDetails());
-  this.start = {};
-  this.organizer = {};
-
-  this.sender = new Office._context_mailbox_item_emailAddressDetails();
-  this.subject = {};
-
-
-  this.displayReplyForm = function (htmlBody) {
-    ///<summary>Display a form for creating an email reply to the sender.</summary>
-    ///<param> name="htmlBody" type="String">The HTML contents of the email reply.</param>
+    var result = new Office._Mailbox_AsyncResult("loadCustomPropertiesAsync");
+    callback(result);
   };
 
   this.displayReplyAllForm = function (htmlBody) {
@@ -51,12 +38,18 @@ Office._$MailboxAppointment = function () {
     ///<param> name="htmlBody" type="String">The HTML contents of the email reply.</param>
   };
 
-  this.getEntities = function () {
-    ///<summary>Gets an array of entities found in an appointment.</summary>
-    return new (Office._context_mailbox_item_entities());
+  this.displayReplyForm = function (htmlBody) {
+    ///<summary>Display a form for creating an email reply to the sender.</summary>
+    ///<param> name="htmlBody" type="String">The HTML contents of the email reply.</param>
   };
+
+  this.getEntities = function () {
+    ///<summary>Gets an array of entities found in an item.</summary>
+    return (new Office._context_mailbox_item_entities());
+  };
+
   this.getEntitiesByType = function (entityType) {
-    ///<summary>Gets an array of entities of the specified entity type found in an appointment.</summary>
+    ///<summary>Gets an array of entities of the specified entity type found in an item.</summary>
     ///<param name="entityType" type="Office.MailboxEnums.EntityType">One of the EntityType enumeration values.</param>
     if (entityType == Office.MailboxEnums.EntityType.Address) {
       return (new Array(""));
@@ -86,18 +79,58 @@ Office._$MailboxAppointment = function () {
       return (new Array(""));
     }
   };
+
   this.getFilteredEntitiesByName = function (name) {
     ///<summary>Returns well-known enitities that pass the named filter defined in the manifest XML file.</summary>
     ///<param name="name" type="String">The name of the filter defined in the manifest XML file.</param>
+    return (new Array(Office._context_mailbox_item_entities()));
   };
+
   this.getRegExMatches = function () {
-    ///<summary>(Message and Appointment) Returns string values that match the regular expressions defined in the manifest XML file.</summary>
+    ///<summary>Returns string values that match the regular expressions defined in the manifest XML file.</summary>
+    return (new Array(""));
   };
+
   this.getRegExMatchesByName = function (name) {
     ///<summary>Returns string values that match the named regular expression defined in the manifest XML file.</summary>
     ///<param name="name" type="String">The name of the regular expression defined in the manifest XML file.</param>
+    return (new Array(""));
   };
+
+  this.attachments = new Array(new Office._context_mailbox_item_attachmentDetails());
+
+  this.dateTimeCreated = {};
+  this.dateTimeModified = {};
+  this.itemClass = {};
+  this.itemId = {};
+  this.itemType = new Office._MailboxEnums_ItemType();
+
+  this.normalizedSubject = {};
+  this.subject = {};
+
+  this.end = {};
+  this.location = {};
+  this.optionalAttendees = new Array(new Office._context_mailbox_item_emailAddressDetails());
+  this.requiredAttendees = new Array(new Office._context_mailbox_item_emailAddressDetails());
+  this.organizer = new Office._context_mailbox_item_emailAddressDetails();
+  this.resources = new Array(new Office._context_mailbox_item_emailAddressDetails());
+  this.start = {};
 };
+
+Office._context_mailbox_item_attachmentDetails = function () {
+  ///<field name="id" type='String'>Gets the EWS attachment identifier.</field>
+  ///<field name="name" type='String'>Get the name of the attachment.</field>
+  ///<field name="contentType" type='String'>Gets the MIME content type of the attachment.</field>
+  ///<field name="size" type='int'>The size of the attachment in bytes.</field>
+  ///<field name="attachmentType" type='Office.MailboxEnums.AttachmentType'>One of the AttachmentType enumeration values.</field>
+  ///<field name="isInline" type='bool'>true if the attachment is inline in the body of the item; otherwise, false.</field>
+  this.id = new {};
+  this.name = new {};
+  this.contentType = new {};
+  this.size = new {};
+  this.attachmentType = new {};
+  this.isInline = new {};
+}
 
 Office._context_mailbox_item_contact = function () {
   ///<field name="addresses" type='String[]'>Gets the mailing and street addresses associated with a contact.</field>
@@ -174,40 +207,56 @@ Office._context_mailbox_item_entities = function () {
 };
 
 Office._context_mailbox_item = function () {
-  ///<field name="cc" type='EmailAddressDetails[]'>(Message Item) Gets the carbon-copy (Cc) recipients of a message.</field>
-  ///<field name="conversationId" type='Object'>(Message Item) Gets an identifier for the email conversation that contains a particular message.</field>
+  ///<field name="attachments" type='AttachmentDetails[]'>(Message and Appointment) Gets a list of attachments to the item.</field>
   ///<field name="dateTimeCreated" type='Date'>(Message and Appointment) Gets the date and time that an item was created.</field>
   ///<field name="dateTimeModified" type='Date'>(Message and Appointment) Gets the date and time that the item was last modified.</field>
-  ///<field name="end" type='Date'>(Appointment Item) Gets the date and time that the appointment is to end.</field>
-  ///<field name="from" type='EmailAddressDetails'>(Message Item) Gets the email address of the sender of a message.</field>
-  ///<field name="internetMessageId" type='Object'>(Message Item) Gets the Internet message identifier for an email message.</field>
+  ///<field name="itemClass" type='String'>(Message and Appointment) Gets the item class of an item.</field>
   ///<field name="itemId" type="String">(Message and Appointment) Gets the Exchange Web Services (EWS) item identifier for an item.</field>
-  ///<field name="itemType" type='Object'>(Message and Appointment) Gets the type of item that an instance represents.</field>
-  ///<field name="itemClass" type='Object'>(Message and Appointment) Gets the item class of an item.</field>
-  ///<field name="location" type='Object'>(Appointment Item) Gets the location of an appointment.</field>
-  ///<field name="normalizedSubject" type='Object'>(Message and Appointment) Gets the subject of the item, with standard prefixes removed.</field>
+  ///<field name="itemType" type='Office.MailboxEnums.ItemType'>(Message and Appointment) Gets the type of item that an instance represents.</field>
+
+  ///<field name="normalizedSubject" type='String'>(Message and Appointment) Gets the subject of the item, with standard prefixes removed.</field>
+  ///<field name="subject" type='String'>(Message and Appointment) Gets the subject of the item.</field>
+
+  ///<field name="end" type='Date'>(Appointment Item) Gets the date and time that the appointment is to end.</field>
+  ///<field name="location" type='String'>(Appointment Item) Gets the location of an appointment.</field>
   ///<field name="optionalAttendees" type='EmailAddressDetails[]'>(Appointment Item) Gets a list of email addresses for optional attendees.</field>
-  ///<field name="organizer" type="String">(Appointment Item) Gets the email address of the meeting organizer for the specified meeting.</field>
-  ///<field name="sender" type='EmailAddressDetails'>(Message and Appointment) Gets the email address of the sender of an email message.</field>
+  ///<field name="organizer" type="EmailAddressDetails">(Appointment Item) Gets the email address of the meeting organizer for the specified meeting.</field>
   ///<field name="requiredAttendees" type='EmailAddressDetails[]'>(Appointment Item) Gets a list of email addresses for required attendees.</field>
   ///<field name="resources" type='EmailAddressDetails[]'>(Appointment Item) Gets the resources required for an appointment.</field>
   ///<field name="start" type='Date'>(Appointment Item) Gets the date and time that the appointment is to begin.</field>
-  ///<field name="subject" type='Object'>(Message and Appointment) Gets the subject of the item.</field>
+
+  ///<field name="cc" type='EmailAddressDetails[]'>(Message Item) Gets the carbon-copy (Cc) recipients of a message.</field>
+  ///<field name="conversationId" type='String'>(Message Item) Gets an identifier for the email conversation that contains a particular message.</field>
+  ///<field name="from" type='EmailAddressDetails'>(Message Item) Gets the email address of the sender of a message.</field>
+  ///<field name="internetMessageId" type='String'>(Message Item) Gets the Internet message identifier for an email message.</field>
+  ///<field name="sender" type='EmailAddressDetails'>(Message) Gets the email address of the sender of an email message.</field>
   ///<field name="to" type='EmailAddressDetails[]'>(Message Item) Gets the list of recipients of an email message.</field>
+
 
   this.loadCustomPropertiesAsync = function (callback, userContext) {
     ///<summary>(Message and Appointment) Asynchronously loads custom properties that are specific to the item and a mail app for Outlook.</summary>
     ///<param name="callback" type="Function">The method to call when the asynchronous load is complete.</param>
-    ///<param name="userContext" type="Object">Any state data theat is passed to the asynchronous method.</param>
+    ///<param name="userContext" type="Object" optional="true">Any state data that is passed to the asynchronous method.</param>
 
-    var result = new Office._Mailbox_AsyncResult("makeEwsRequestAsync");
+    var result = new Office._Mailbox_AsyncResult("loadCustomPropertiesAsync");
     callback(result);
+  };
+
+  this.displayReplyAllForm = function (htmlBody) {
+    ///<summary>(Message and Appointment) Display a form for creating an email reply to all recipients.</summary>
+    ///<param> name="htmlBody" type="String">The HTML contents of the email reply.</param>
+  };
+
+  this.displayReplyForm = function (htmlBody) {
+    ///<summary>(Message and Appointment) Display a form for creating an email reply to the sender.</summary>
+    ///<param> name="htmlBody" type="String">The HTML contents of the email reply.</param>
   };
 
   this.getEntities = function () {
     ///<summary>(Message and Appointment) Gets an array of entities found in an item.</summary>
     return (new Office._context_mailbox_item_entities());
   };
+
   this.getEntitiesByType = function (entityType) {
     ///<summary>(Message and Appointment) Gets an array of entities of the specified entity type found in an item.</summary>
     ///<param name="entityType" type="Office.MailboxEnums.EntityType">One of the EntityType enumeration values.</param>
@@ -240,56 +289,48 @@ Office._context_mailbox_item = function () {
     }
   };
 
-  this.displayReplyForm = function (htmlBody) {
-    ///<summary>Display a form for creating an email reply to the sender.</summary>
-    ///<param> name="htmlBody" type="String">The HTML contents of the email reply.</param>
-  };
-
-  this.displayReplyAllForm = function (htmlBody) {
-    ///<summary>Display a form for creating an email reply to all recipients.</summary>
-    ///<param> name="htmlBody" type="String">The HTML contents of the email reply.</param>
-  };
-
   this.getFilteredEntitiesByName = function (name) {
     ///<summary>(Message and Appointment) Returns well-known enitities that pass the named filter defined in the manifest XML file.</summary>
     ///<param name="name" type="String">The name of the filter defined in the manifest XML file.</param>
     return (new Array(Office._context_mailbox_item_entities()));
   };
+
   this.getRegExMatches = function () {
     ///<summary>(Message and Appointment) Returns string values that match the regular expressions defined in the manifest XML file.</summary>
     return (new Array(""));
   };
+
   this.getRegExMatchesByName = function (name) {
     ///<summary>(Message and Appointment) Returns string values that match the named regular expression defined in the manifest XML file.</summary>
     ///<param name="name" type="String">The name of the regular expression defined in the manifest XML file.</param>
     return (new Array(""));
   };
 
-  this.itemType = {};
-  this.itemClass = {};
-  this.itemId = {};
+  this.attachments = new Array(new Office._context_mailbox_item_attachmentDetails());
+
   this.dateTimeCreated = {};
   this.dateTimeModified = {};
+  this.itemClass = {};
+  this.itemId = {};
+  this.itemType = new Office._MailboxEnums_ItemType();
 
-  this.from = new Office._context_mailbox_item_emailAddressDetails();
-  this.to = new Array(new Office._context_mailbox_item_emailAddressDetails());
-  this.cc = new Array(new Office._context_mailbox_item_emailAddressDetails());
-  this.conversationId = {};
-  this.internetMessageId = {};
   this.normalizedSubject = {};
-  this.sender = new Office._context_mailbox_item_emailAddressDetails();
   this.subject = {};
 
-  this.organizer = {};
   this.end = {};
   this.location = {};
-  this.normalizedSubject = {};
   this.optionalAttendees = new Array(new Office._context_mailbox_item_emailAddressDetails());
   this.requiredAttendees = new Array(new Office._context_mailbox_item_emailAddressDetails());
+  this.organizer = new Office._context_mailbox_item_emailAddressDetails();
   this.resources = new Array(new Office._context_mailbox_item_emailAddressDetails());
   this.start = {};
-  this.organizer = {};
 
+  this.cc = new Array(new Office._context_mailbox_item_emailAddressDetails());
+  this.conversationId = {};
+  this.from = new Office._context_mailbox_item_emailAddressDetails();
+  this.internetMessageId = {};
+  this.sender = new Office._context_mailbox_item_emailAddressDetails();
+  this.to = new Array(new Office._context_mailbox_item_emailAddressDetails());
 }
 
 Office._context_mailbox_item_meetingRequest = function () {
@@ -324,39 +365,31 @@ Office._context_mailbox_item_meetingSuggestion = function () {
 
 
 Office._$MailboxMessage = function () {
-  ///<field name="cc" type='EmailAddressDetails[]'>Gets the carbon-copy (Cc) recipients of a message.</field>
-  ///<field name="conversationId" type='Object'>Gets an identifier for the email conversation that contains a particular message.</field>
-  ///<field name="from" type='EmailAddressDetails'>Gets the email address of the sender of a message.</field>
-  ///<field name="internetMessageId" type='Object'>Gets the Internet message identifier for an email message.</field>
-  ///<field name="normalizedSubject" type='Object'>Gets the subject of the item, with standard prefixes removed.</field>
-  ///<field name="sender" type='EmailAddressDetails'>Gets the email address of the sender of an email message.</field>
-  ///<field name="subject" type='Object'>Gets the subject of the item.</field>
-  ///<field name="to" type='EmailAddressDetails[]'>Gets the list of recipients of an email message.</field>
+  ///<field name="attachments" type='AttachmentDetails[]'>Gets a list of attachments to the message.</field>
+  ///<field name="dateTimeCreated" type='Date'>Gets the date and time that an message was created.</field>
+  ///<field name="dateTimeModified" type='Date'>Gets the date and time that the message was last modified.</field>
+  ///<field name="itemClass" type='String'>Gets the item class of an item.</field>
   ///<field name="itemId" type="String">Gets the Exchange Web Services (EWS) item identifier for an item.</field>
-  ///<field name="itemType" type='Object'>Gets the type of item that an instance represents.</field>
-  ///<field name="itemClass" type='Object'>Gets the item class of an item.</field>
-  ///<field name="dateTimeCreated" type='Date'>Gets the date and time that an item was created.</field>
-  ///<field name="dateTimeModified" type='Date'>Gets the date and time that the item was last modified.</field>
+  ///<field name="itemType" type='Office.MailboxEnums.ItemType'>Gets the type of item that an instance represents.</field>
 
-  this.itemType = {};
-  this.itemClass = {};
-  this.itemId = {};
-  this.dateTimeCreated = {};
-  this.dateTimeModified = {};
+  ///<field name="normalizedSubject" type='String'>Gets the subject of the message, with standard prefixes removed.</field>
+  ///<field name="subject" type='String'>Gets the subject of the message.</field>
 
-  this.from = new Office._context_mailbox_item_emailAddressDetails();
-  this.to = new Array(new Office._context_mailbox_item_emailAddressDetails());
-  this.cc = new Array(new Office._context_mailbox_item_emailAddressDetails());
-  this.conversationId = {};
-  this.internetMessageId = {};
-  this.normalizedSubject = {};
-  this.sender = new Office._context_mailbox_item_emailAddressDetails();
-  this.subject = {};
+  ///<field name="cc" type='EmailAddressDetails[]'>Gets the carbon-copy (Cc) recipients of a message.</field>
+  ///<field name="conversationId" type='String'>Gets an identifier for the email conversation that contains a particular message.</field>
+  ///<field name="from" type='EmailAddressDetails'>Gets the email address of the sender of a message.</field>
+  ///<field name="internetMessageId" type='String'>Gets the Internet message identifier for an email message.</field>
+  ///<field name="sender" type='EmailAddressDetails'>Gets the email address of the sender of an email message.</field>
+  ///<field name="to" type='EmailAddressDetails[]'>Gets the list of recipients of an email message.</field>
 
 
-  this.displayReplyForm = function (htmlBody) {
-    ///<summary>Display a form for creating an email reply to the sender.</summary>
-    ///<param> name="htmlBody" type="String">The HTML contents of the email reply.</param>
+  this.loadCustomPropertiesAsync = function (callback, userContext) {
+    ///<summary>Asynchronously loads custom properties that are specific to the item and a mail app for Outlook.</summary>
+    ///<param name="callback" type="Function">The method to call when the asynchronous load is complete.</param>
+    ///<param name="userContext" type="Object" optional="true">Any state data that is passed to the asynchronous method.</param>
+
+    var result = new Office._Mailbox_AsyncResult("loadCustomPropertiesAsync");
+    callback(result);
   };
 
   this.displayReplyAllForm = function (htmlBody) {
@@ -364,12 +397,18 @@ Office._$MailboxMessage = function () {
     ///<param> name="htmlBody" type="String">The HTML contents of the email reply.</param>
   };
 
+  this.displayReplyForm = function (htmlBody) {
+    ///<summary>Display a form for creating an email reply to the sender.</summary>
+    ///<param> name="htmlBody" type="String">The HTML contents of the email reply.</param>
+  };
+
   this.getEntities = function () {
-    ///<summary>Gets an array of entities found in a message.</summary>
+    ///<summary>Gets an array of entities found in an item.</summary>
     return (new Office._context_mailbox_item_entities());
   };
+
   this.getEntitiesByType = function (entityType) {
-    ///<summary>Gets an array of entities of the specified entity type found in a message.</summary>
+    ///<summary>Gets an array of entities of the specified entity type found in an item.</summary>
     ///<param name="entityType" type="Office.MailboxEnums.EntityType">One of the EntityType enumeration values.</param>
     if (entityType == Office.MailboxEnums.EntityType.Address) {
       return (new Array(""));
@@ -399,20 +438,42 @@ Office._$MailboxMessage = function () {
       return (new Array(""));
     }
   };
+
   this.getFilteredEntitiesByName = function (name) {
     ///<summary>Returns well-known enitities that pass the named filter defined in the manifest XML file.</summary>
     ///<param name="name" type="String">The name of the filter defined in the manifest XML file.</param>
     return (new Array(Office._context_mailbox_item_entities()));
   };
+
   this.getRegExMatches = function () {
-    ///<summary>(Message and Appointment) Returns string values that match the regular expressions defined in the manifest XML file.</summary>
+    ///<summary>Returns string values that match the regular expressions defined in the manifest XML file.</summary>
     return (new Array(""));
   };
+
   this.getRegExMatchesByName = function (name) {
     ///<summary>Returns string values that match the named regular expression defined in the manifest XML file.</summary>
     ///<param name="name" type="String">The name of the regular expression defined in the manifest XML file.</param>
     return (new Array(""));
   };
+
+  this.attachments = new Array(new Office._context_mailbox_item_attachmentDetails());
+
+  this.dateTimeCreated = {};
+  this.dateTimeModified = {};
+  this.itemClass = {};
+  this.itemId = {};
+  this.itemType = new Office._MailboxEnums_ItemType();
+
+  this.normalizedSubject = {};
+  this.subject = {};
+
+  this.cc = new Array(new Office._context_mailbox_item_emailAddressDetails());
+  this.conversationId = {};
+  this.from = new Office._context_mailbox_item_emailAddressDetails();
+  this.internetMessageId = {};
+  this.sender = new Office._context_mailbox_item_emailAddressDetails();
+  this.to = new Array(new Office._context_mailbox_item_emailAddressDetails());
+
 };
 
 Office._context_mailbox_item_phoneNumber = function () {
@@ -434,15 +495,23 @@ Office._context_mailbox_item_taskSuggestion = function () {
 Office._context_mailbox_userProfile = function () {
   ///<field name="displayName" type='String'>Gets the user's display name.</field>
   ///<field name="emailAddress" type='String'>Gets the user's SMTP email address.</field>
-  ///<field name="timeZone" type'String'>Gets the user's local time zone.</field>
+  ///<field name="timeZone" type='String'>Gets the user's local time zone.</field>
   this.displayName = {};
   this.emailAddress = {};
   this.timeZone = {};
 };
 
 Office._context_mailbox = function () {
+  ///<field name="ewsUrl" type='String'>Gets the URL of the Exchange Web Services (EWS) endpoint for this email account.</field>
+  ///<field name="item" type="Item">Represents the current item (message or appointment).</field>
+  ///<field name="userProfile" type="UserProfile">Represents the host application's user profile information.</field>
+  ///<field name="diagnostics" type="Diagnostics">Provides troubleshooting capabilities for a mail app.</field>
   var instance = new Office._context_mailbox_item();
+
+  this.diagnostics = new Office._context_mailbox_diagnostics();
+  this.ewsUrl = {};
   this.item = intellisense.nullWithCompletionsOf(instance);
+  this.userProfile = new Office._context_mailbox_userProfile();
 
   this.displayAppointmentForm = function (itemId) {
     ///<summary>Displays an existing calendar appointment.</summary>
@@ -468,7 +537,14 @@ Office._context_mailbox = function () {
     /// </param>
   };
 
-  this.getuserIdentityTokenAsync = function (callback, userContext) {
+  this.getCallbackTokenAsync = function (callback, userContext) {
+    ///<summary>Gets a token that can be used to retrieve attachments for the current item.</summary>
+    ///<param name="callback" type="function">The method to call when the asynchronous method is complete.</param>
+    ///<param name="userContext" type="Object" optional="true">Any state data that is passed to the asynchronous method.</param>
+    var result = new Office._Mailbox_AsyncResult("getCallbackTokenAsync");
+    callback(result);
+  }
+  this.getUserIdentityTokenAsync = function (callback, userContext) {
     ///<summary>Gets a token identifying the user and the mail app for Outlook.</summary>
     ///<param name="callback" type="function">The method to call when the asynchronous load method is complete.</param>
     ///<param name="userContext" type="Object" optional="true">Any state data that is passed to the asynchronous method.</param>
@@ -485,9 +561,16 @@ Office._context_mailbox = function () {
     var result = new Office._Mailbox_AsyncResult("makeEwsRequestAsync");
     callback(result);
   };
-  this.userProfile = new Office._context_mailbox_userProfile();
 }
 
+Office._context_mailbox_diagnostics = function () {
+  ///<field name="hostName" type='String'>Gets a string containing the name of the host application for the mail app.</field>
+  ///<field name="hostVersion" type='String'>Gets a string containing the version of either the host application or the Exchange server.</field>
+  ///<field name="OWAView" type='String'>Gets a string containing the current view of the Outlook Web App.</field>
+  this.hostName = {};
+  this.hostVersion = {};
+  this.OWAView = {};
+}
 
 Office._Mailbox_AsyncResult = function (method) {
   ///<field name="asyncContext" type='Object'>The userContext parameter passed to the callback function.</field>
@@ -497,11 +580,19 @@ Office._Mailbox_AsyncResult = function (method) {
   this.error = {};
   this.status = {};
 
+  if (method == "getCallbackTokenAsync") {
+    this.value = {};
+    intellisense.annotate(this, {
+      ///<field name="value" type='String'>The EWS callback token.</field>
+      value: null
+    });
+  }
+
   if (method == "getUserIdentityTokenAsync") {
     this.value = {}
     intellisense.annotate(this, {
       ///<field name="value" type='String'>A JSON Web token that identifies the current user.</field>
-      value2: null
+      value: null
     });
   }
 
@@ -516,13 +607,19 @@ Office._Mailbox_AsyncResult = function (method) {
   if (method == "loadCustomPropertiesAsync") {
     this.value = new Office._context_mailbox_item_customProperties();
     intellisense.annotate(this, {
-      ///<field name="value" type='String'>The custom properties</field>
+      ///<field name="value" type='CustomProperties'>The custom properties</field>
       value: null
     });
   }
 }
 
 Office._MailboxEnums = function () {
+  this.AttachmentType = {
+    ///<field type="String">Specifies that the attachment is a file.</field>
+    File: "file",
+    ///<field type="String">Specifies that the attachment is an email message, appointment, or task.</field>
+    Item: "item"
+  };
   this.EntityType = {
     ///<field type="String">Specifies that the entity is a meeting suggestion.</field>
     MeetingSuggestion: "meetingSuggestion",
@@ -545,11 +642,20 @@ Office._MailboxEnums = function () {
     ///<field type="String">Specifies an appointment item. This is an IPM.Appointment type.</field>
     Appointment: 'appointment'
   };
-
+  this.RecipientType = {
+    ///<field type="String">Specifies that the recipient is not one of the other recipient types.</field>
+    Other: "other",
+    ///<field type="String">Specifies that the recipient is a distribution list containing a list of email addresses.</field>
+    DistributionList: "distributionList",
+    ///<field type="String">Specifies that the recipient is an SMTP email address that is on the Exchange server.</field>
+    User: "user",
+    ///<field type="String">Specifies that the recipient is an SMTP email address that is not on the Exchange server.</field>
+    ExternalUser: "externalUser"
+  };
   this.ResponseType = {
-    ///<field type="String">"Specifies that no response has been received."</field>
+    ///<field type="String">Specifies that no response has been received.</field>
     None: "none",
-    ///<field type="String">"Specifies that you are the meeting organizer.</field>
+    ///<field type="String">Specifies that you are the meeting organizer.</field>
     Organizer: "organizer",
     ///<field type="String">Specifies that the attendee is tentatively attending.</field>
     Tentative: "tentative",

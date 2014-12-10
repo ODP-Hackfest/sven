@@ -4,10 +4,10 @@ _u.ExtensibilityStrings = function()
 {
 };
 _u.ExtensibilityStrings.registerClass("_u.ExtensibilityStrings");
-_u.ExtensibilityStrings.l_EwsRequestOversized_Text = "_Ţhę řęqűëšţ ěxçëęďś ťhé 1 MB şîźě łîmîť. Pľéąşé mőđífý ýőűř EWS řëqüęşţ.öíőüáűöíő_";
-_u.ExtensibilityStrings.l_OffsetNotfound_Text = "_Ăň óffšęť fôř ťhíš ťímé śţámp čóűłđń'ť bé fôµňđ.öíőüáű_";
-_u.ExtensibilityStrings.l_ElevatedPermissionNeededForMethod_Text = "_Ëľęváťéđ pěŕmîšśîőń íş řěqµíŕęđ ťó ćáľĺ ţhë měťhôđ: '{0}'.öíőüáűö_";
-_u.ExtensibilityStrings.l_ElevatedPermissionNeeded_Text = "_Ęľëváţëđ pěŕmîśşîôń îš řěqüířęď ţó ăćçęşš přóţęćţëď měmběŕš ôf ţhě JävăŚçŕípť API fôř Ôffîçě.öíőüáűöíőüá_";
-_u.ExtensibilityStrings.l_InvalidEventDates_Text = "_Ţhě ëňđ đąţę őćçµřš bëfőŕé ťhé šţáŕţ ďáťë.öíőüá_";
-_u.ExtensibilityStrings.l_InvalidDate_Text = "_Ţhě íńpüţ đőęśň'ţ ŕéśöłvě ťö â văłíď đăťé.öíőüá_";
-_u.ExtensibilityStrings.l_InternalProtocolError_Text = "_Îńţëŕňáĺ přôťôćöľ ěŕřôŕ: '{0}'.öíőü_"
+_u.ExtensibilityStrings.l_EwsRequestOversized_Text = "A kérés túllépi az 1 MB-os méretkorlátot. Módosítsa az EWS-kérést.";
+_u.ExtensibilityStrings.l_OffsetNotfound_Text = "Nem található eltérési érték az időbélyeghez.";
+_u.ExtensibilityStrings.l_ElevatedPermissionNeededForMethod_Text = "Emelt szintű engedély szükséges a következő metódus hívásához: {0}.";
+_u.ExtensibilityStrings.l_ElevatedPermissionNeeded_Text = "Emelt szintű engedély szükséges az Office JavaScript API védett tagjainak eléréséhez.";
+_u.ExtensibilityStrings.l_InvalidEventDates_Text = "A befejezési időpont megelőzi a kezdési időpontot.";
+_u.ExtensibilityStrings.l_InvalidDate_Text = "A beírt adat nem értelmezhető érvényes dátumként.";
+_u.ExtensibilityStrings.l_InternalProtocolError_Text = "Belső protokollhiba: {0}."

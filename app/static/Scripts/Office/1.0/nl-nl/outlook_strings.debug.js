@@ -4,10 +4,10 @@ _u.ExtensibilityStrings = function()
 {
 };
 _u.ExtensibilityStrings.registerClass("_u.ExtensibilityStrings");
-_u.ExtensibilityStrings.l_EwsRequestOversized_Text = "The request exceeds the 1 MB size limit. Please modify your EWS request.";
-_u.ExtensibilityStrings.l_OffsetNotfound_Text = "An offset for this time stamp couldn't be found.";
-_u.ExtensibilityStrings.l_ElevatedPermissionNeededForMethod_Text = "Elevated permission is required to call the method: '{0}'.";
-_u.ExtensibilityStrings.l_ElevatedPermissionNeeded_Text = "Elevated permission is required to access protected members of the JavaScript API for Office.";
-_u.ExtensibilityStrings.l_InvalidEventDates_Text = "The end date occurs before the start date.";
-_u.ExtensibilityStrings.l_InvalidDate_Text = "The input doesn't resolve to a valid date.";
-_u.ExtensibilityStrings.l_InternalProtocolError_Text = "Internal protocol error: '{0}'."
+_u.ExtensibilityStrings.l_EwsRequestOversized_Text = "De aanvraag overschrijdt de limiet van 1 MB. Pas uw EWS-aanvraag aan.";
+_u.ExtensibilityStrings.l_OffsetNotfound_Text = "Er is geen offset gevonden voor dit tijdstempel.";
+_u.ExtensibilityStrings.l_ElevatedPermissionNeededForMethod_Text = "U hebt een verhoogde machtiging nodig voor het aanroepen van de methode: '{0}'.";
+_u.ExtensibilityStrings.l_ElevatedPermissionNeeded_Text = "U hebt een verhoogde machtiging nodig voor toegang tot beschermde leden van de JavaScript-API voor Office.";
+_u.ExtensibilityStrings.l_InvalidEventDates_Text = "De einddatum ligt voor de begindatum.";
+_u.ExtensibilityStrings.l_InvalidDate_Text = "De invoer kan niet worden omgezet in een geldige datum.";
+_u.ExtensibilityStrings.l_InternalProtocolError_Text = "Interne protocolfout: '{0}'."

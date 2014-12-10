@@ -4,10 +4,10 @@ _u.ExtensibilityStrings = function()
 {
 };
 _u.ExtensibilityStrings.registerClass("_u.ExtensibilityStrings");
-_u.ExtensibilityStrings.l_EwsRequestOversized_Text = "İThê rëqûêšt êxçéëdš thé 1 MB šîzé lïmìt. Plëæşé mõdïƒÿ ÿôür EWS rêqúèšt.Iğüıi";
-_u.ExtensibilityStrings.l_OffsetNotfound_Text = "İÅñ õƒƒşët ƒør thíš tímê štæmp ¢øüldñ't bé ƒøüñd.Iğıi";
-_u.ExtensibilityStrings.l_ElevatedPermissionNeededForMethod_Text = "İÊlëvåtêd pèrmîşšïòñ íş réqüìrëd tø çâll thë mëthød: '{0}'.Iğıi";
-_u.ExtensibilityStrings.l_ElevatedPermissionNeeded_Text = "İÊlëvåtêd pèrmîşšïòñ íş réqüìrëd tø ä¢çëşš prõtêçtêd mêmbèrš óƒ thë JävåŠ©rípt API ƒôr Öƒƒïçé.Iğüöıi";
-_u.ExtensibilityStrings.l_InvalidEventDates_Text = "İThê ëñd dãtè ôç©ürš béƒôré thë štært dætê.Iğıi";
-_u.ExtensibilityStrings.l_InvalidDate_Text = "İThê ïñpút dòêşñ't rëšòlvé tô ã vælìd dætë.Iğıi";
-_u.ExtensibilityStrings.l_InternalProtocolError_Text = "İÏñtërñál prôtø©øl érròr: '{0}'.Iıi"
+_u.ExtensibilityStrings.l_EwsRequestOversized_Text = "İstek, 1 MB'lık boyut sınırını aşıyor. Lütfen EWS isteğinizi değiştirin.";
+_u.ExtensibilityStrings.l_OffsetNotfound_Text = "Bu zaman damgası için bir uzaklık bulunamadı.";
+_u.ExtensibilityStrings.l_ElevatedPermissionNeededForMethod_Text = "Şu yöntemi çağırmak için yükseltilmiş izin gerekir: '{0}'.";
+_u.ExtensibilityStrings.l_ElevatedPermissionNeeded_Text = "Office için JavaScript API'sinin korumalı üyelerine erişmek amacıyla yükseltilmiş izinler gerekir:.";
+_u.ExtensibilityStrings.l_InvalidEventDates_Text = "Bitiş tarihi başlangıç tarihinden önce girilmiş.";
+_u.ExtensibilityStrings.l_InvalidDate_Text = "Giriş, geçerli bir tarihe çözümlenemiyor.";
+_u.ExtensibilityStrings.l_InternalProtocolError_Text = "İç protokol hatası: '{0}'."

@@ -1,7 +1,11 @@
-/* Excel specific OM library */
-/* Version: 15.0.4428.1000 */
+/* Excel specific API library */
+/* Version: 15.0.4448.1000 */
 /*
 	Copyright (c) Microsoft Corporation.  All rights reserved.
+*/
+
+/*
+	Your use of this file is governed by the Microsoft Services Agreement http://go.microsoft.com/fwlink/?LinkId=266419.
 */
 
 OSF.OUtil.augmentList(Microsoft.Office.WebExtension.FilterType, {

@@ -4,10 +4,10 @@ _u.ExtensibilityStrings = function()
 {
 };
 _u.ExtensibilityStrings.registerClass("_u.ExtensibilityStrings");
-_u.ExtensibilityStrings.l_EwsRequestOversized_Text = "The request exceeds the 1 MB size limit. Please modify your EWS request.";
-_u.ExtensibilityStrings.l_OffsetNotfound_Text = "An offset for this time stamp couldn't be found.";
-_u.ExtensibilityStrings.l_ElevatedPermissionNeededForMethod_Text = "Elevated permission is required to call the method: '{0}'.";
-_u.ExtensibilityStrings.l_ElevatedPermissionNeeded_Text = "Elevated permission is required to access protected members of the JavaScript API for Office.";
-_u.ExtensibilityStrings.l_InvalidEventDates_Text = "The end date occurs before the start date.";
-_u.ExtensibilityStrings.l_InvalidDate_Text = "The input doesn't resolve to a valid date.";
-_u.ExtensibilityStrings.l_InternalProtocolError_Text = "Internal protocol error: '{0}'."
+_u.ExtensibilityStrings.l_EwsRequestOversized_Text = "Die Anforderung überschreitet die Größenbeschränkung von 1 MB. Ändern Sie Ihre EWS-Anforderung.";
+_u.ExtensibilityStrings.l_OffsetNotfound_Text = "Für diesen Zeitstempel wurde kein Offset gefunden.";
+_u.ExtensibilityStrings.l_ElevatedPermissionNeededForMethod_Text = "Für den Aufruf der Methode '{0}' sind erhöhte Rechte erforderlich.";
+_u.ExtensibilityStrings.l_ElevatedPermissionNeeded_Text = "Für den Zugriff auf geschützte Elemente des JavaScript-APIs für Office sind erhöhte Rechte erforderlich.";
+_u.ExtensibilityStrings.l_InvalidEventDates_Text = "Das Ende liegt vor dem Beginn.";
+_u.ExtensibilityStrings.l_InvalidDate_Text = "Die Eingabe kann nicht zu einem gültigen Datum aufgelöst werden.";
+_u.ExtensibilityStrings.l_InternalProtocolError_Text = "Interner Protokollfehler: '{0}'."

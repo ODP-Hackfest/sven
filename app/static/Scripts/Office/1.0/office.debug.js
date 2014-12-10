@@ -1,7 +1,11 @@
-/* Office JavaScript OM library */
-/* Version: 15.0.4431.1000 */
+/* Office JavaScript API library */
+/* Version: 15.0.4515.1000 */
 /*
 	Copyright (c) Microsoft Corporation.  All rights reserved.
+*/
+
+/*
+	Your use of this file is governed by the Microsoft Services Agreement http://go.microsoft.com/fwlink/?LinkId=266419.
 */
 
 (function(window) {
@@ -316,26 +320,38 @@ OSF.OUtil=(function () {
 			}
 		},
 		encodeBase64: function OSF_Outil$encodeBase64(input) {
-			var codex="ABCDEFGHIJKLMNOP"+						"QRSTUVWXYZabcdef"+						"ghijklmnopqrstuv"+						"wxyz0123456789+/"+						"=";
+			if (!input) return input;
+			var codex="ABCDEFGHIJKLMNOP"+						"QRSTUVWXYZabcdef"+						"ghijklmnopqrstuv"+						"wxyz0123456789+/=";
 			var output=[];
 			var temp=[];
 			var index=0;
-			var a, b, c;
+			var c1, c2, c3, a, b, c;
+			var i;
 			var length=input.length;
 			do {
-				a=input[index++];
-				b=input[index++];
-				c=input[index++];
-				temp[0]=a >> 2;
-				temp[1]=((a & 3) << 4) | (b >> 4);
-				temp[2]=((b & 15) << 2) | (c >> 6);
-				temp[3]=c & 63;
-				if (isNaN(b)) {
-					temp[2]=temp[3]=64;
-				} else if (isNaN(c)) {
-					temp[3]=64;
+				c1=input.charCodeAt(index++);
+				c2=input.charCodeAt(index++);
+				c3=input.charCodeAt(index++);
+				i=0;
+				a=c1 & 255 ; b=c1 >> 8; c=c2 & 255;
+				temp[i++]=a >> 2;
+				temp[i++]=((a & 3) << 4) | (b >> 4);
+				temp[i++]=((b & 15) << 2) | (c >> 6);
+				temp[i++]=c & 63;
+				if (!isNaN(c2)) {
+					a=c2 >> 8; b=c3 & 255 ; c=c3 >> 8;
+					temp[i++]=a >> 2;
+					temp[i++]=((a & 3) << 4) | (b >> 4);
+					temp[i++]=((b & 15) << 2) | (c >> 6);
+					temp[i++]=c & 63;
 				}
-				for (var t=0; t < 4; t++) {
+				if (isNaN(c2)) {
+					temp[i-1]=64;
+				} else if (isNaN(c3)) {
+					temp[i-2]=64;
+					temp[i-1]=64;
+				}
+				for (var t=0; t < i; t++) {
 					output.push(codex.charAt(temp[t]));
 				}
 			} while (index < length);
@@ -3261,7 +3277,7 @@ OSF.DDA.EventDispId={
 						}
 					};
 					var postLoadLocaleStringInitialization=function OSF__OfficeAppFactory_initialize$postLoadLocaleStringInitialization() {
-						var scriptPath=basePath+_appToScriptTable[appContext.get_appName()+"-"+appContext.get_appVersion()];
+						var scriptPath=basePath+_appToScriptTable[appContext.get_appName()+"-15"];
 						var stringNS=Strings.OfficeOM;
 						var errorMgr=OSF.DDA.ErrorCodeManager;
 						var errorCodes=errorMgr.errorCodes;
