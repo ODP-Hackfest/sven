@@ -1,4 +1,9 @@
-from flask import Flask, request
+from flask import Flask, render_template, url_for, request, redirect, session, flash
+
+from flickr_api.auth import AuthHandler
+from flickr_api import FlickrError
+import flickr_api
+
 import requests
 import requests.auth
 import urllib
@@ -11,11 +16,15 @@ AAD_REDIRECT_URI = "http://localhost/aad_auth_callback"
 AAD_AUTH_ENDPOINT_URI = "https://login.windows.net/common/oauth2/authorize"
 AAD_TOKEN_ENDPOINT_URI = "https://login.windows.net/common/oauth2/token"
 
+# Flickr config
+FLICKR_KEY = '298c1f664f996ecbc003d0480cd25554'
+FLICKR_SECRET = 'fa377e5c4a158410'
+
 # Routes
 app = Flask(__name__)
 
 @app.route("/")
-def root():
+def index():
     return app.send_static_file('./App/Home/Home.html')
 
 #####
@@ -31,7 +40,7 @@ def aad_auth_callbak():
     error = request.args.get('error', '')
     if error:
         return "Error from AAD authorization endpoint: " + error
-    # TODO: validate state    
+    # TODO: validate state
     code = request.args.get('code')
     body = {"grant_type": "authorization_code",
             "code": code,
@@ -56,12 +65,49 @@ def get_aad_auth_url():
                  "resource": AAD_RESOURCE,
                  "redirect_uri": AAD_REDIRECT_URI} # TODO: state
     auth_url = AAD_AUTH_ENDPOINT_URI + "?" + urllib.urlencode(auth_params)
-    return auth_url 
+    return auth_url
 
 # AAD login
 #####
 
-if __name__ == "__main__":
-    app.debug = True
-    app.run(port=80)
 
+#-----------------------------------------------------------------------------
+# flickr login
+#-----------------------------------------------------------------------------
+
+@app.route('/flickr_login')
+def flickr_login():
+    """Login to flickr with read only access.After successful login redirects to
+    callback url else redirected to index page
+    """
+    try:
+        auth = AuthHandler(key=FLICKR_KEY, secret=FLICKR_SECRET,
+                            callback=url_for('flickr_callback', _external=True))
+        return redirect(auth.get_authorization_url('read'))
+
+    except FlickrError, f:
+        # Flash failed login & redirect to index page
+        flash(u'Failed to authenticate user with flickr', 'error')
+        return redirect(url_for('index'))
+
+@app.route('/flickr_login/callback')
+def flickr_callback():
+    """Callback handler from flickr.
+    Set the oauth token, oauth_verifier to session variable for later use.
+    Redirect to /photos
+    """
+    session['oauth_token'] = request.args.get('oauth_token')
+    session['oauth_verifier'] = request.args.get('oauth_verifier')
+    flash("logged in successfully", "success")
+    return redirect(url_for('index'))
+
+
+#-----------------------------------------------------------------------------
+# main
+#-----------------------------------------------------------------------------
+if __name__ == "__main__":
+    import os
+
+    app.debug = True
+    app.secret_key = os.urandom(24)
+    app.run(port=8080)
