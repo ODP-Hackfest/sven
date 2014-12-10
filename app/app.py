@@ -15,6 +15,7 @@ AAD_REDIRECT_URI = "http://localhost/aad_auth_callback"
 AAD_AUTH_ENDPOINT_URI = "https://login.windows.net/common/oauth2/authorize"
 AAD_TOKEN_ENDPOINT_URI = "https://login.windows.net/common/oauth2/token"
 AAD_GRAPH_ENDPOINT_URI = "https://graph.windows.net"
+O365_DISCOVERY_ENDPOINT_URI = "https://api.office.com/discovery/v1.0/me/services"
 
 # Routes
 app = Flask(__name__)
@@ -55,7 +56,9 @@ def aad_auth_callbak():
     id_token = json["id_token"]
     id_token_decoded = jwt.decode(id_token, verify=False)
     unique_name = id_token_decoded["unique_name"]
-    return "me: " + unique_name + ", access token: " + access_token + ", refresh token: " + refresh_token + ", id token: " + id_token
+    o365_myFiles_endpoints = get_o365_service_endpoints(access_token) # Note: discovery service returns files endpoint info only probably because the access_token has the scope for files only
+    return str(o365_myFiles_endpoints)
+    #return "me: " + unique_name + ", access token: " + access_token + ", refresh token: " + refresh_token + ", id token: " + id_token
 
 
 def get_aad_auth_url():
@@ -67,6 +70,16 @@ def get_aad_auth_url():
     return auth_url 
 
 
+def get_o365_service_endpoints(access_token):
+    url = O365_DISCOVERY_ENDPOINT_URI
+    headers = {"Authorization": "Bearer " + access_token,
+               "Content-Type": "application/json;odata=verbose"}
+    response = requests.get(url,
+                            headers=headers)
+    response_json = response.json()
+    return response_json["value"][0]["serviceResourceId"]
+
+ 
 def get_aad_user_info(access_token):
     pass # TODO: It requires access_token with scope for AAD graph resources
     url = AAD_GRAPH_ENDPOINT_URI + "/me?api-version=2013-11-08"
