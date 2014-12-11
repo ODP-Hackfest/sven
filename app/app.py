@@ -233,7 +233,7 @@ def search(term):
     photos = flickr_api.Photo.search(
                 #tags=term,
                 text=term,
-                sort='interestingness-desc',
+                sort='relevance',
                 per_page=20
     )
     print photos
