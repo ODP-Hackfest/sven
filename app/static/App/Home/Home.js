@@ -30,8 +30,8 @@
             // If setSelectedDataAsync method is supported by the host application,
             // insertImageLink is hooked up to call the method
             if (Office.context.document.setSelectedDataAsync) {
-                $('#insertImageLink').click(function () {
-                    var imgHtml = "<img " + "src='" + picUrl + "' img/>";
+                $('img').click(function() {
+                    var imgHtml = "<img " + "src='" + $(this).prop("src") + "' img/>";
                     setHTMLImage(imgHtml);
                 });
             }
