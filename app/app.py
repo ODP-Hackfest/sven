@@ -12,7 +12,8 @@ import jwt
 # Config values
 AAD_CLIENT_ID = "c3c7e96f-f145-4445-bd72-c655bdf17c31"
 AAD_CLIENT_SECRET = "PdstmBJuxCeSnFA4PJIFWgawtpTj6d2YAfWG+0VSaDU="
-AAD_REDIRECT_URI = "http://localhost/aad_auth_callback"
+#AAD_REDIRECT_URI = "http://localhost/aad_auth_callback"
+AAD_REDIRECT_URI = "http://104.236.173.186/aad_auth_callback"
 
 # SPO MyFiles              : Varies with tenant, need to call discovery API
 # AAD graph                : https://graph.windows.net/
@@ -126,6 +127,16 @@ def get_o365_service_info(access_token, capability):
             return serviceInfo
 
 
+def is_o365_logged_in():
+    serviceEndpointUri = session.get("o365_myFiles_service_endpoint")
+    serviceResourceId = session.get("o365_myFiles_service_resource_id")
+    refresh_token = session.get("o365_refresh_token")
+    if (serviceEndpointUri is None) or (serviceResourceId is None) or (refresh_token is None):
+        return False
+    else:
+        return True
+
+
 class Photo:
     def __init__(self, photo_url):
         self.photo_url = photo_url
@@ -133,15 +144,13 @@ class Photo:
     def getPhotoFile(self):
         return self.photo_url
 
-@app.route("/search_spo_myfiles") # TODO
-def get_o365_myFiles():
+def get_o365_myFiles(term):
+    if is_o365_logged_in() == False:
+        return None
+
     serviceEndpointUri = session.get("o365_myFiles_service_endpoint")
     serviceResourceId = session.get("o365_myFiles_service_resource_id")
     refresh_token = session.get("o365_refresh_token")
-    if (serviceEndpointUri is None) or (serviceResourceId is None) or (refresh_token is None):
-        flash("Need O365 credentials")
-        return redirect(url_for('index'))
-
     access_token = get_o365_access_token_myFiles(serviceResourceId, refresh_token)
     url = serviceEndpointUri + "/Files('Shared%20with%20Everyone')/Children"
     auth_headers = {"Authorization": "Bearer " + access_token,
@@ -153,8 +162,9 @@ def get_o365_myFiles():
     for document in response_json["value"]:
         url = document["Url"]
         if url.endswith(".jpg") or url.endswith(".png"):
-            photos.append(Photo(url))
-    return render_template('photos.html', photos=photos, maximum=30, term="OneDrive for Business")
+            if term in url:
+                photos.append(Photo(url))
+    return photos
 
 
 def get_o365_access_token_myFiles(serviceResourceId, refresh_token):
@@ -227,7 +237,13 @@ def search(term):
     )
     print photos
     #raise
-    return render_template('photos.html', photos=photos, maximum=20, term=term)
+
+    # OneDrive photos
+    odb_photos = None
+    if is_o365_logged_in():
+        odb_photos = get_o365_myFiles(term)
+
+    return render_template('photos.html', photos=photos, odb_photos=odb_photos, maximum=20, term=term)
 
 
 #-----------------------------------------------------------------------------
