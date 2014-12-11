@@ -7,7 +7,7 @@ import flickr_api
 import requests
 import requests.auth
 import urllib
-#import jwt
+import jwt
 
 # Config values
 AAD_CLIENT_ID = "c3c7e96f-f145-4445-bd72-c655bdf17c31"
@@ -52,8 +52,8 @@ def send_file(filename):
 # http://msdn.microsoft.com/en-us/library/azure/dn645542.aspx
 @app.route("/aad_login")
 def login():
-    link = '<a href="https://api.office.com/discovery/v1.0/me/FirstSignIn?redirect_uri=%s&scope=MyFiles.Read" target="_blank">Authenticate with OrgId</a>'
-    return link % AAD_REDIRECT_URI
+    link = "https://api.office.com/discovery/v1.0/me/FirstSignIn?redirect_uri=%s&scope=MyFiles.Read"
+    return redirect(link % AAD_REDIRECT_URI, code=302)
 
 
 @app.route("/aad_auth_callback")
@@ -85,17 +85,20 @@ def aad_auth_callbak():
     access_token = json["access_token"]
     refresh_token = json["refresh_token"]
     id_token = json["id_token"]
+    session["o365_access_token"] = access_token
+    session["o365_refresh_token"] = refresh_token
 
-#    id_token_decoded = jwt.decode(id_token, verify=False)
-#    unique_name = id_token_decoded["unique_name"]
+    id_token_decoded = jwt.decode(id_token, verify=False) 
+    unique_name = id_token_decoded["unique_name"]
 
     o365_myFiles_serviceInfo = get_o365_service_info(access_token, "MyFiles")
     o365_myFiles_service_endpoint = o365_myFiles_serviceInfo["ServiceEndpointUri"] # e.g) https://yongjkim-my.sharepoint.com/personal/yongjkim_yongjkim_onmicrosoft_com/_api
     o365_myFiles_service_resource_id = o365_myFiles_serviceInfo["ServiceResourceId"] # e.g) https://yongjkim-my.sharepoint.com/
-    o365_myFiles = get_o365_myFiles(o365_myFiles_service_endpoint, o365_myFiles_service_resource_id, refresh_token)
+    session["o365_myFiles_service_endpoint"] = o365_myFiles_service_endpoint
+    session["o365_myFiles_service_resource_id"] = o365_myFiles_service_resource_id
 
-    return str(o365_myFiles)
-    #return "me: " + unique_name + ", access token: " + access_token + ", refresh token: " + refresh_token + ", id token: " + id_token
+    flash("O365 logged in successfully", "success")
+    return '<a href="javascript:window.close()">O365 logged in successfully, close this window</a>'
 
 
 def get_aad_auth_url(login_hint):
@@ -122,7 +125,15 @@ def get_o365_service_info(access_token, capability):
             return serviceInfo
 
 
-def get_o365_myFiles(serviceEndpointUri, serviceResourceId, refresh_token):
+@app.route("/search_spo_myfiles")
+def get_o365_myFiles():
+    serviceEndpointUri = session.get("o365_myFiles_service_endpoint")
+    serviceResourceId = session.get("o365_myFiles_service_resource_id")
+    refresh_token = session.get("o365_refresh_token")
+    if (serviceEndpointUri is None) or (serviceResourceId is None) or (refresh_token is None):
+        flash("Need O365 credentials")
+        return redirect(url_for('index'))
+
     access_token = get_o365_access_token_myFiles(serviceResourceId, refresh_token)
     url = serviceEndpointUri + "/Files('Shared%20with%20Everyone')/Children"
     auth_headers = {"Authorization": "Bearer " + access_token,
@@ -130,7 +141,7 @@ def get_o365_myFiles(serviceEndpointUri, serviceResourceId, refresh_token):
     response = requests.get(url,
                             headers=auth_headers)
     response_json = response.json()
-    return response_json["value"]
+    return str(response_json["value"])
 
 
 def get_o365_access_token_myFiles(serviceResourceId, refresh_token):
