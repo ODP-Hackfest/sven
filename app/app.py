@@ -231,7 +231,8 @@ def flickr_callback():
 def search(term):
     flickr_api.set_keys(**secrets)
     photos = flickr_api.Photo.search(
-                tags=term,
+                #tags=term,
+                text=term,
                 sort='interestingness-desc',
                 per_page=20
     )
