@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>Ultimate Picture Search</title>
+    <script src="{{ url_for('static', filename='Scripts/jquery-1.9.1.js') }}" type="text/javascript"></script>
+
+    <link href="{{ url_for('static', filename='Content/Office.css') }}" rel="stylesheet" type="text/css" />
+    <!-- <script src="https://appsforoffice.microsoft.com/lib/1.0/hosted/office.js" type="text/javascript"></script> -->
+
+    <!-- To enable offline debugging using a local reference to Office.js, use:                        -->
+    <script src="{{ url_for('static', filename='Scripts/Office/MicrosoftAjax.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='Scripts/Office/1.0/office.js') }}" type="text/javascript"></script>
+
+    <link href="{{ url_for('static', filename='App/App.css') }}" rel="stylesheet" type="text/css" />
+    <script src="{{ url_for('static', filename='App/App.js') }}" type="text/javascript"></script>
+
+    <link href="{{ url_for('static', filename='App/Home/Home.css') }}" rel="stylesheet" type="text/css" />
+    <script src="{{ url_for('static', filename='App/Home/Home.js') }}" type="text/javascript"></script>
+    <link href="{{ url_for('static', filename='App/hoverbox.css') }}" rel="stylesheet" type="text/css" media="screen, projection" />
+</head>
+<body>
+    <!-- OAuth Providers -->
+    <div>
+        <a href="/aad_login">O365 AAD login test</a>
+        <p>
+        <a href="https://login.microsoftonline.com/logout.srf" target="_blank">[DEBUG] Logout O365</a>
+    </div>
+    <div>
+        <a href="/flickr_login">Flickr login test</a>
+    </div>
+    <!-- Page content -->
+    <div id="Content">
+        <input type="button" id="searhPictures" value="Search Pictures" />
+        <br />
+        <br />
+        <br />
+        <br />
+        <span>Results: </span>
+        <br />
+    </div>
+  <div class="container">
+    {% macro flash_messages() -%}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{category}} fade in">
+                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                      {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    {%- endmacro %}
+    {{ flash_messages() }}
+    {% block content %}
+    {% endblock %}
+  </div>
+</body>
+</html>

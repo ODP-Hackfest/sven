@@ -26,6 +26,8 @@ O365_DISCOVERY_ENDPOINT_URI = "https://api.office.com/discovery/v1.0/me/services
 FLICKR_KEY = '298c1f664f996ecbc003d0480cd25554'
 FLICKR_SECRET = 'fa377e5c4a158410'
 
+secrets = {'api_key': FLICKR_KEY, 'api_secret': FLICKR_SECRET }
+
 # Routes
 app = Flask(__name__)
 
@@ -137,8 +139,31 @@ def flickr_callback():
     """
     session['oauth_token'] = request.args.get('oauth_token')
     session['oauth_verifier'] = request.args.get('oauth_verifier')
+    
+    #auth = AuthHandler(key=FLICKR_KEY, secret=FLICKR_SECRET,
+    #                        callback=url_for('flickr_callback', _external=True))
+    #auth.set_verifier(request.args.get('oauth_verifier'))
+    #auth.save('/tmp/flickr_token')
+
     flash("logged in successfully", "success")
     return redirect(url_for('index'))
+
+
+#-----------------------------------------------------------------------------
+# flickr search rendering
+#-----------------------------------------------------------------------------
+@app.route('/search/<term>')
+def search(term):
+    flickr_api.set_keys(**secrets)
+    #flickr_api.set_auth_handler('/tmp/flickr_token')
+    photos = flickr_api.Photo.search(
+                tags=term,
+                sort='date-posted-desc',
+                per_page=100
+    )
+    print photos
+    #raise
+    return render_template('photos.html', photos=photos, maximum=100, term=term)
 
 
 #-----------------------------------------------------------------------------
