@@ -54,9 +54,8 @@ def send_file(filename):
 # AAD login
 @app.route("/aad_login")
 def login():
-    link = '<a href="%s" target="_blank">Authenticate with OrgId</a>'
-    return link % get_aad_auth_url() # TODO: render_page
-
+    link = "https://api.office.com/discovery/v1.0/me/FirstSignIn?redirect_uri=%s&scope=MyFiles.Read"
+    return redirect(link % AAD_REDIRECT_URI, code=302)
 
 @app.route("/aad_auth_callback")
 def aad_auth_callbak():
@@ -80,11 +79,20 @@ def aad_auth_callbak():
     access_token = json["access_token"]
     refresh_token = json["refresh_token"]
     id_token = json["id_token"]
-    id_token_decoded = jwt.decode(id_token, verify=False)
+    session["o365_access_token"] = access_token
+    session["o365_refresh_token"] = refresh_token
+
+    id_token_decoded = jwt.decode(id_token, verify=False) 
     unique_name = id_token_decoded["unique_name"]
-    o365_myFiles_endpoints = get_o365_service_endpoints(access_token) # Note: discovery service returns files endpoint info only probably because the access_token has the scope for files only
-    return str(o365_myFiles_endpoints)
-    #return "me: " + unique_name + ", access token: " + access_token + ", refresh token: " + refresh_token + ", id token: " + id_token
+
+    o365_myFiles_serviceInfo = get_o365_service_info(access_token, "MyFiles")
+    o365_myFiles_service_endpoint = o365_myFiles_serviceInfo["ServiceEndpointUri"] # e.g) https://yongjkim-my.sharepoint.com/personal/yongjkim_yongjkim_onmicrosoft_com/_api
+    o365_myFiles_service_resource_id = o365_myFiles_serviceInfo["ServiceResourceId"] # e.g) https://yongjkim-my.sharepoint.com/
+    session["o365_myFiles_service_endpoint"] = o365_myFiles_service_endpoint
+    session["o365_myFiles_service_resource_id"] = o365_myFiles_service_resource_id
+
+    flash("O365 logged in successfully", "success")
+    return '<a href="javascript:window.close()">O365 logged in successfully, close this window</a>'
 
 
 def get_aad_auth_url():
@@ -98,10 +106,44 @@ def get_aad_auth_url():
 
 def get_o365_service_endpoints(access_token):
     url = O365_DISCOVERY_ENDPOINT_URI
-    headers = {"Authorization": "Bearer " + access_token,
-               "Content-Type": "application/json;odata=verbose"}
+    auth_headers = {"Authorization": "Bearer " + access_token,
+                    "Accept": "application/json;odata=verbose"}
     response = requests.get(url,
-                            headers=headers)
+                            headers=auth_headers)
+    response_json = response.json()
+    results = response_json["d"]["results"]
+    for serviceInfo in results:
+        if serviceInfo["Capability"] == capability:
+            return serviceInfo
+
+
+@app.route("/search_spo_myfiles")
+def get_o365_myFiles():
+    serviceEndpointUri = session.get("o365_myFiles_service_endpoint")
+    serviceResourceId = session.get("o365_myFiles_service_resource_id")
+    refresh_token = session.get("o365_refresh_token")
+    if (serviceEndpointUri is None) or (serviceResourceId is None) or (refresh_token is None):
+        flash("Need O365 credentials")
+        return redirect(url_for('index'))
+
+    access_token = get_o365_access_token_myFiles(serviceResourceId, refresh_token)
+    url = serviceEndpointUri + "/Files('Shared%20with%20Everyone')/Children"
+    auth_headers = {"Authorization": "Bearer " + access_token,
+                    "Accept": "application/json"}
+    response = requests.get(url,
+                            headers=auth_headers)
+    response_json = response.json()
+    return str(response_json["value"])
+
+
+def get_o365_access_token_myFiles(serviceResourceId, refresh_token):
+    body = {"resource": serviceResourceId,
+            "client_id": AAD_CLIENT_ID,
+            "client_secret": AAD_CLIENT_SECRET,
+            "grant_type": "refresh_token",
+            "refresh_token": refresh_token}
+    response = requests.get(AAD_TOKEN_ENDPOINT_URI,
+                           data=body)
     response_json = response.json()
     return response_json["value"][0]["serviceResourceId"]
 
