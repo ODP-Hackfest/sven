@@ -40,8 +40,8 @@ def index():
         return render_template('home.html', username='Olaf')
         #return app.send_static_file('./App/Home/Home.html')
 
-@app.route('/<path:filename>')  
-def send_file(filename):  
+@app.route('/<path:filename>')
+def send_file(filename):
     return send_from_directory(app.static_folder, filename)
 
 
@@ -100,7 +100,7 @@ def get_o365_service_endpoints(access_token):
     response_json = response.json()
     return response_json["value"][0]["serviceResourceId"]
 
- 
+
 def get_aad_user_info(access_token):
     pass # TODO: It requires access_token with scope for AAD graph resources
     url = AAD_GRAPH_ENDPOINT_URI + "/me?api-version=2013-11-08"
@@ -141,11 +141,6 @@ def flickr_callback():
     """
     session['oauth_token'] = request.args.get('oauth_token')
     session['oauth_verifier'] = request.args.get('oauth_verifier')
-    
-    #auth = AuthHandler(key=FLICKR_KEY, secret=FLICKR_SECRET,
-    #                        callback=url_for('flickr_callback', _external=True))
-    #auth.set_verifier(request.args.get('oauth_verifier'))
-    #auth.save('/tmp/flickr_token')
 
     flash("logged in successfully", "success")
     return redirect(url_for('index'))
@@ -156,7 +151,6 @@ def flickr_callback():
 #-----------------------------------------------------------------------------
 @app.route('/search/<term>')
 def search(term):
-    flickr_api.set_auth_handler(session['oauth_token'])
     flickr_api.set_keys(**secrets)
     photos = flickr_api.Photo.search(
                 tags=term,
