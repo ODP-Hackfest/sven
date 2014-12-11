@@ -209,11 +209,11 @@ def search(term):
     photos = flickr_api.Photo.search(
                 tags=term,
                 sort='interestingness-desc',
-                per_page=30
+                per_page=20
     )
     print photos
     #raise
-    return render_template('photos.html', photos=photos, maximum=30, term=term)
+    return render_template('photos.html', photos=photos, maximum=20, term=term)
 
 
 #-----------------------------------------------------------------------------
