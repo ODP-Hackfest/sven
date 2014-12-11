@@ -12,15 +12,17 @@ import jwt
 # Config values
 AAD_CLIENT_ID = "c3c7e96f-f145-4445-bd72-c655bdf17c31"
 AAD_CLIENT_SECRET = "PdstmBJuxCeSnFA4PJIFWgawtpTj6d2YAfWG+0VSaDU="
-# SPO files: Microsoft.SharePoint
-# AAD graph: https://graph.windows.net
-# EXO ?
-AAD_RESOURCE = "Microsoft.SharePoint"
 AAD_REDIRECT_URI = "http://localhost/aad_auth_callback"
+
+# SPO MyFiles              : Varies with tenant, need to call discovery API
+# AAD graph                : https://graph.windows.net/
+# EXO Contact Calendar Mail: https://outlook.office365.com/
+AAD_RESOURCE = "https://api.office.com/discovery/"
+
 AAD_AUTH_ENDPOINT_URI = "https://login.windows.net/common/oauth2/authorize"
 AAD_TOKEN_ENDPOINT_URI = "https://login.windows.net/common/oauth2/token"
+O365_DISCOVERY_ENDPOINT_URI = "https://api.office.com/discovery/me/services"
 AAD_GRAPH_ENDPOINT_URI = "https://graph.windows.net"
-O365_DISCOVERY_ENDPOINT_URI = "https://api.office.com/discovery/v1.0/me/services"
 
 # Flickr config
 FLICKR_KEY = '298c1f664f996ecbc003d0480cd25554'
@@ -48,16 +50,26 @@ def send_file(filename):
 
 #####
 # AAD login
+# http://msdn.microsoft.com/en-us/office/office365/api/discovery-service-rest-operations
+# http://msdn.microsoft.com/en-us/library/azure/dn645542.aspx
 @app.route("/aad_login")
 def login():
     link = "https://api.office.com/discovery/v1.0/me/FirstSignIn?redirect_uri=%s&scope=MyFiles.Read"
     return redirect(link % AAD_REDIRECT_URI, code=302)
+
 
 @app.route("/aad_auth_callback")
 def aad_auth_callbak():
     error = request.args.get('error', '')
     if error:
         return "Error from AAD authorization endpoint: " + error
+
+    # From FirstSignIn
+    user_email = request.args.get('user_email')
+    if (user_email):
+        return redirect(get_aad_auth_url(user_email), code=302)
+
+    # From AAD authorization endpoint
     # TODO: validate state
     code = request.args.get('code')
     body = {"grant_type": "authorization_code",
@@ -91,16 +103,17 @@ def aad_auth_callbak():
     return '<a href="javascript:window.close()">O365 logged in successfully, close this window</a>'
 
 
-def get_aad_auth_url():
+def get_aad_auth_url(login_hint):
     auth_params={"client_id": AAD_CLIENT_ID,
                  "response_type": "code",
                  "resource": AAD_RESOURCE,
+                 "login_hint": login_hint,
                  "redirect_uri": AAD_REDIRECT_URI} # TODO: state
     auth_url = AAD_AUTH_ENDPOINT_URI + "?" + urllib.urlencode(auth_params)
     return auth_url
 
 
-def get_o365_service_endpoints(access_token):
+def get_o365_service_info(access_token, capability):
     url = O365_DISCOVERY_ENDPOINT_URI
     auth_headers = {"Authorization": "Bearer " + access_token,
                     "Accept": "application/json;odata=verbose"}
@@ -111,6 +124,7 @@ def get_o365_service_endpoints(access_token):
     for serviceInfo in results:
         if serviceInfo["Capability"] == capability:
             return serviceInfo
+
 
 class Photo:
     def __init__(self, photo_url):
@@ -152,11 +166,11 @@ def get_o365_access_token_myFiles(serviceResourceId, refresh_token):
     response = requests.get(AAD_TOKEN_ENDPOINT_URI,
                            data=body)
     response_json = response.json()
-    return response_json["value"][0]["serviceResourceId"]
+    return response_json["access_token"]
 
 
 def get_aad_user_info(access_token):
-    pass # TODO: It requires access_token with scope for AAD graph resources
+    pass # TODO: It requires access_token with scope for AAD graph resource id
     url = AAD_GRAPH_ENDPOINT_URI + "/me?api-version=2013-11-08"
     headers = {"Authorization": "Bearer " + access_token,
                "Content-Type": "application/json"}
