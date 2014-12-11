@@ -7,10 +7,11 @@
         <div class="photo">
         <ul class="hoverbox">
             {% for photo in photos[:maximum] %}
-                <li>
-                    <a href="#"><img src="{{ photo.getPhotoFile() }}" alt={{ "Description: %s " % photo.description if photo.description }} id="insertedImage{{ loop.index }}" /><img src="{{ photo.getPhotoFile() }}" alt={{ "Description: %s " % photo.description if photo.description }} class="preview" id="insertImageLink{{ loop.index }}" /></a>
-                </li>
+            <li>
+                <a href="#"><img src="{{ photo.getPhotoFile() }}" alt={{ "Description: %s " % photo.description if photo.description }} id="insertedImage{{ loop.index }}" /><img src="{{ photo.getPhotoFile() }}" alt={{ "Description: %s " % photo.description if photo.description }} class="preview" id="insertImageLink{{ loop.index }}" /></a>
+            </li>
             {% endfor %}
+        </ul>
         </div>
     {% endif %}
 {% endblock %}
