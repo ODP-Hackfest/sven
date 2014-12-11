@@ -6,23 +6,32 @@
     // The initialize function must be run each time a new page is loaded
     Office.initialize = function (reason) {
         $(document).ready(function () {
-            var picUrl = $('#Text1');
-            $('#preViewBtn').click(function () {
-                if (validatePic(picUrl)) {
-                    preViewPic();
-                    $('#insertImageBtn').removeAttr("disabled");
-                }
-            });
+            app.initialize();
+            var picUrl;
 
-            $('#Text1').change(function () {
-                $('#insertImageBtn').attr("disabled", "disabled");
-            });
+            // If getSelectedDataAsync method is supported by the host application,
+            // reads data from current document selection and displays a preview of the picture
+            if (Office.context.document.getSelectedDataAsync) {
+                $('#searhPictures').click(function () {
+                    Office.context.document.getSelectedDataAsync(Office.CoercionType.Text,
+                        function (result) {
+                            if (result.status === Office.AsyncResultStatus.Succeeded) {
+                                picUrl = result.value.trim();
+                                app.showNotification('Selected:', picUrl);
+                                window.location.assign("http://104.236.173.186/search/" + picUrl);
+                            } else {
+                                app.showNotification('Error:', result.error.message);
+                            }
+                        }
+                    );
+                });
+            }
 
-            // If setSelectedDataAsync method is supported by the host application
-            // setDatabtn is hooked up to call the method else setDatabtn is removed
+            // If setSelectedDataAsync method is supported by the host application,
+            // insertImageLink is hooked up to call the method
             if (Office.context.document.setSelectedDataAsync) {
-                $('#insertImageBtn').click(function () {
-                    var imgHtml = "<img " + "src='" + picUrl.val() + "' img/>";
+                $('#insertImageLink').click(function () {
+                    var imgHtml = "<img " + "src='" + picUrl + "' img/>";
                     setHTMLImage(imgHtml);
                 });
             }
@@ -31,31 +40,29 @@
 
     // invalidate Picture Url
     function validatePic(picUrl) {
-        if (picUrl.val().length == 0) {
-            writeError("Please input online picture URL");
+        if (picUrl.length == 0) {
+            app.showNotification("Please select a text from the document to search awesome pictures.");
             return false;
         }
 
-        var picextension = picUrl.val().substring(picUrl.val().lastIndexOf("."), picUrl.val().length);
+        var picextension = picUrl.substring(picUrl.lastIndexOf("."), picUrl.length);
         picextension = picextension.toLowerCase();
         if ((picextension != ".jpg") && (picextension != ".gif") && (picextension != ".jpeg") && (picextension != ".png") && (picextension != ".bmp")) {
-            writeError("Image type must be one of gif,jpeg,jpg,png");
-            picUrl.focus();
+            app.showNotification("Image type must be one of gif,jpeg,jpg,png");
 
             // Clear Picture Url
-            picUrl.select();
+            picUrl = "";
             document.selection.clear();
             return false;
         }
 
-        $('#results')[0].innerText = "";
         return true;
     }
 
     // Preview Picture to make sure that url is valid
-    function preViewPic() {
-        var picaddress = $('#Text1').val();
-        $('#prePic').prop("src", picaddress);
+    function preViewPic(picUrl) {
+        $('#insertImageLinkThumbnail').prop("src", picUrl);
+        $('#insertImageLink').prop("src", picUrl);
     }
 
     // Insert image 
@@ -68,11 +75,5 @@
                     writeError('Error: ' + asyncResult.error.message);
                 }
             });
-    }
-
-    // Print Error Message
-    function writeError(text) {
-        $('#results')[0].innerText = text;
-        $('#results').css("color", "red");
     }
 })();

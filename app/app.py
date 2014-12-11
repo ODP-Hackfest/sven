@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, session, flash
+from flask import Flask, render_template, url_for, request, redirect, session, flash, send_from_directory
 
 from flickr_api.auth import AuthHandler
 from flickr_api import FlickrError
@@ -27,12 +27,24 @@ AAD_GRAPH_ENDPOINT_URI = "https://graph.windows.net"
 FLICKR_KEY = '298c1f664f996ecbc003d0480cd25554'
 FLICKR_SECRET = 'fa377e5c4a158410'
 
+secrets = {'api_key': FLICKR_KEY, 'api_secret': FLICKR_SECRET }
+
 # Routes
 app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return app.send_static_file('./App/Home/Home.html')
+    if request.method == 'OPTIONS':
+        print 'OPTIONS'
+        return ''
+    else:
+        return render_template('home.html', username='Olaf')
+        #return app.send_static_file('./App/Home/Home.html')
+
+@app.route('/<path:filename>')
+def send_file(filename):
+    return send_from_directory(app.static_folder, filename)
+
 
 #####
 # AAD login
@@ -133,6 +145,10 @@ def get_o365_access_token_myFiles(serviceResourceId, refresh_token):
     return response_json["access_token"]
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 def get_aad_user_info(access_token):
     pass # TODO: It requires access_token with scope for AAD graph resource id
     url = AAD_GRAPH_ENDPOINT_URI + "/me?api-version=2013-11-08"
@@ -173,8 +189,25 @@ def flickr_callback():
     """
     session['oauth_token'] = request.args.get('oauth_token')
     session['oauth_verifier'] = request.args.get('oauth_verifier')
+
     flash("logged in successfully", "success")
     return redirect(url_for('index'))
+
+
+#-----------------------------------------------------------------------------
+# flickr search rendering
+#-----------------------------------------------------------------------------
+@app.route('/search/<term>')
+def search(term):
+    flickr_api.set_keys(**secrets)
+    photos = flickr_api.Photo.search(
+                tags=term,
+                sort='interestingness-desc',
+                per_page=30
+    )
+    print photos
+    #raise
+    return render_template('photos.html', photos=photos, maximum=30, term=term)
 
 
 #-----------------------------------------------------------------------------
@@ -185,4 +218,10 @@ if __name__ == "__main__":
 
     app.debug = True
     app.secret_key = os.urandom(24)
-    app.run(port=80)
+
+    # Set root view that handles OPTIONS call
+    index.provide_automatic_options = False
+    index.methods = ['GET', 'OPTIONS']
+    app.add_url_rule('/', index)
+
+    app.run(host='0.0.0.0', port=80)

@@ -6,22 +6,37 @@ from app import app
 
 # Import CherryPy
 import cherrypy
+from cherrypy import wsgiserver
 
 if __name__ == '__main__':
 
+    d = wsgiserver.WSGIPathInfoDispatcher({'/': app})
+    server = wsgiserver.CherryPyWSGIServer(('0.0.0.0', 80), d)
+    try:
+        server.start()
+    except KeyboardInterrupt:
+        server.stop()
+
     # Mount the application
-    cherrypy.tree.graft(app, "/")
+    #cherrypy.tree.graft(app, "/")
+    #cherrypy.tree.mount(None, '/static', config={
+    #    '/': {
+    #        'tools.staticdir.on': True,
+    #        'tools.staticdir.dir': app.static_folder
+    #    },
+    #})
+
 
     # Unsubscribe the default server
-    cherrypy.server.unsubscribe()
+    #cherrypy.server.unsubscribe()
 
     # Instantiate a new server object
-    server = cherrypy._cpserver.Server()
+    #server = cherrypy._cpserver.Server()
 
     # Configure the server object
-    server.socket_host = "0.0.0.0"
-    server.socket_port = 80
-    server.thread_pool = 30
+    #server.socket_host = "0.0.0.0"
+    #server.socket_port = 8080
+    #server.thread_pool = 30
 
     # For SSL Support
     # server.ssl_module            = 'pyopenssl'
@@ -30,9 +45,9 @@ if __name__ == '__main__':
     # server.ssl_certificate_chain = 'ssl/bundle.crt'
 
     # Subscribe this server
-    server.subscribe()
+    #server.subscribe()
 
     # Start the server engine (Option 1 *and* 2)
 
-    cherrypy.engine.start()
-    cherrypy.engine.block()
+    #cherrypy.engine.start()
+    #cherrypy.engine.block()
