@@ -141,4 +141,4 @@ if __name__ == "__main__":
 
     app.debug = True
     app.secret_key = os.urandom(24)
-    app.run(port=8080)
+    app.run(port=80)
