@@ -34,9 +34,11 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     if request.method == 'OPTIONS':
+        print 'OPTIONS'
         return ''
     else:
-        return app.send_static_file('./App/Home/Home.html')
+        return render_template('home.html', username='Olaf')
+        #return app.send_static_file('./App/Home/Home.html')
 
 @app.route('/<path:filename>')  
 def send_file(filename):  

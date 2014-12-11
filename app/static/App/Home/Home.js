@@ -17,6 +17,7 @@
                         function (result) {
                             if (result.status === Office.AsyncResultStatus.Succeeded) {
                                 picUrl = result.value.trim();
+                                app.showNotification('Selected:', picUrl);
                                 window.location.assign("http://104.236.173.186/search/" + picUrl);
                             } else {
                                 app.showNotification('Error:', result.error.message);
