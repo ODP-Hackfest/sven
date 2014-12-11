@@ -41,10 +41,6 @@ def index():
         #return app.send_static_file('./App/Home/Home.html')
 
 
-@app.route('/scripts/office/1.0/en-us')
-def send_file(filename):
-    return send_from_directory(app.static_folder + "/Scripts/Office/1.0/en-us", filename)
-
 @app.route('/<path:filename>')
 def send_file(filename):
     return send_from_directory(app.static_folder, filename)
