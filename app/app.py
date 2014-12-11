@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, session, flash
+from flask import Flask, render_template, url_for, request, redirect, session, flash, send_from_directory
 
 from flickr_api.auth import AuthHandler
 from flickr_api import FlickrError
@@ -29,11 +29,17 @@ FLICKR_SECRET = 'fa377e5c4a158410'
 # Routes
 app = Flask(__name__)
 
+@app.route("/")
 def index():
     if request.method == 'OPTIONS':
         return ''
     else:
         return app.send_static_file('./App/Home/Home.html')
+
+@app.route('/<path:filename>')  
+def send_file(filename):  
+    return send_from_directory(app.static_folder, filename)
+
 
 #####
 # AAD login
