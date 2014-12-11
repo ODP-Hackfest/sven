@@ -11,6 +11,12 @@ if __name__ == '__main__':
 
     # Mount the application
     cherrypy.tree.graft(app, "/")
+    cherrypy.tree.mount(None, '/static', config={
+        '/': {
+            'tools.staticdir.on': True,
+            'tools.staticdir.dir': app.static_folder
+        },
+    })
 
     # Unsubscribe the default server
     cherrypy.server.unsubscribe()
