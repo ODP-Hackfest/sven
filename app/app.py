@@ -156,16 +156,16 @@ def flickr_callback():
 #-----------------------------------------------------------------------------
 @app.route('/search/<term>')
 def search(term):
+    flickr_api.set_auth_handler(session['oauth_token'])
     flickr_api.set_keys(**secrets)
-    #flickr_api.set_auth_handler('/tmp/flickr_token')
     photos = flickr_api.Photo.search(
                 tags=term,
                 sort='date-posted-desc',
-                per_page=100
+                per_page=50
     )
     print photos
     #raise
-    return render_template('photos.html', photos=photos, maximum=100, term=term)
+    return render_template('photos.html', photos=photos, maximum=50, term=term)
 
 
 #-----------------------------------------------------------------------------
