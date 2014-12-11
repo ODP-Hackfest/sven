@@ -145,10 +145,6 @@ def get_o365_access_token_myFiles(serviceResourceId, refresh_token):
     return response_json["access_token"]
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
 def get_aad_user_info(access_token):
     pass # TODO: It requires access_token with scope for AAD graph resource id
     url = AAD_GRAPH_ENDPOINT_URI + "/me?api-version=2013-11-08"
