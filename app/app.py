@@ -253,7 +253,7 @@ def search(term):
 if __name__ == "__main__":
     import os
 
-    app.debug = True
+    app.debug = False
     app.secret_key = os.urandom(24)
 
     # Set root view that handles OPTIONS call
