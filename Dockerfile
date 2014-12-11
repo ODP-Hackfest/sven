@@ -35,5 +35,5 @@ WORKDIR /app
 
 # Set the default command to execute    
 # when creating a new container
-CMD python server.py
+CMD python app.py
 
