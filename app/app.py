@@ -124,8 +124,14 @@ def get_o365_service_info(access_token, capability):
         if serviceInfo["Capability"] == capability:
             return serviceInfo
 
+class Photo:
+    def __init__(self, photo_url):
+        self.photo_url = photo_url
 
-@app.route("/search_spo_myfiles")
+    def getPhotoFile(self):
+        return self.photo_url
+
+@app.route("/search_spo_myfiles") # TODO
 def get_o365_myFiles():
     serviceEndpointUri = session.get("o365_myFiles_service_endpoint")
     serviceResourceId = session.get("o365_myFiles_service_resource_id")
@@ -141,7 +147,12 @@ def get_o365_myFiles():
     response = requests.get(url,
                             headers=auth_headers)
     response_json = response.json()
-    return str(response_json["value"])
+    photos = []
+    for document in response_json["value"]:
+        url = document["Url"]
+        if url.endswith(".jpg") or url.endswith(".png"):
+            photos.append(Photo(url))
+    return render_template('photos.html', photos=photos, maximum=30, term="OneDrive for Business")
 
 
 def get_o365_access_token_myFiles(serviceResourceId, refresh_token):
