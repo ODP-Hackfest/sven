@@ -1,17 +1,31 @@
 {% extends "layout.html" %}
 {% block content %}
-    {% if not photos %}
+    {% if not photos and not odb_photos %}
         <h2> No Search result found :-( </h2>
     {% else %}
-        <h2></center> Photos of {{ term }}</center></h2>
-        <div class="photo">
-        <ul class="hoverbox">
-            {% for photo in photos[:maximum] %}
-            {% set img_src = photo.getPhotoFile() %}
-                <li>
-                    <a href="#"><img src="{{ img_src }}"/><img src="{{ img_src }}" class="preview"/></a>
-                </li>
-            {% endfor %}
-        </div>
+        {% if photos %}
+            <h2></center> Photos of {{ term }} in Flickr</center></h2>
+            <div class="photo">
+            <ul class="hoverbox">
+                {% for photo in photos[:maximum] %}
+                {% set img_src = photo.getPhotoFile() %}
+                    <li>
+                        <a href="#"><img src="{{ img_src }}"/><img src="{{ img_src }}" class="preview"/></a>
+                    </li>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if odb_photos %}
+            <h2></center> Photos of {{ term }} in OneDrive</center></h2>
+            <div class="photo">
+            <ul class="hoverbox">
+                {% for odb_photo in odb_photos[:maximum] %}
+                    <li>
+                        <a href="#"><img src="{{ odb_photo.getPhotoFile() }}" /><img src="{{ odb_photo.getPhotoFile() }}" class="preview" /></a>
+                    </li>
+                {% endfor %}
+            </div>
+        {% endif %}
     {% endif %}
 {% endblock %}
