@@ -154,12 +154,12 @@ def search(term):
     flickr_api.set_keys(**secrets)
     photos = flickr_api.Photo.search(
                 tags=term,
-                sort='date-posted-desc',
-                per_page=50
+                sort='interestingness-desc',
+                per_page=30
     )
     print photos
     #raise
-    return render_template('photos.html', photos=photos, maximum=50, term=term)
+    return render_template('photos.html', photos=photos, maximum=30, term=term)
 
 
 #-----------------------------------------------------------------------------
