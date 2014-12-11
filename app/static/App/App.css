@@ -22,16 +22,16 @@
 }
 
 .padding {
-    padding: 15px;
+    padding: 10px;
 }
 
 #notification-message {
     background-color: #818285;
     color: #fff;
     position: absolute;
-    width: 100%;
+    width: 95%;
     min-height: 80px;
-    right: 0;
+    left: 0;
     z-index: 100;
     bottom: 0;
     display: none; /* Hidden until invoked */

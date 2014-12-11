@@ -29,9 +29,11 @@ FLICKR_SECRET = 'fa377e5c4a158410'
 # Routes
 app = Flask(__name__)
 
-@app.route("/")
 def index():
-    return app.send_static_file('./App/Home/Home.html')
+    if request.method == 'OPTIONS':
+        return ''
+    else:
+        return app.send_static_file('./App/Home/Home.html')
 
 #####
 # AAD login
@@ -141,4 +143,10 @@ if __name__ == "__main__":
 
     app.debug = True
     app.secret_key = os.urandom(24)
+
+    # Set root view that handles OPTIONS call
+    index.provide_automatic_options = False
+    index.methods = ['GET', 'OPTIONS']
+    app.add_url_rule('/', index)
+
     app.run(host='0.0.0.0', port=80)
